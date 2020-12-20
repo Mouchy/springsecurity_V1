@@ -1,5 +1,7 @@
 package com.springsecurity.security.core.config;
 
+
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
 	auth.jdbcAuthentication().dataSource(dataSource)
-		.withDefaultSchema()
-		.withUser("user")
-        .password(encoder.encode("password"))
-        .roles("USER");
+					.usersByUsernameQuery("select email, password, enabled from users where email = ?")
+					.authoritiesByUsernameQuery("select email, authority from authorities where email = ?");
     }
 }
